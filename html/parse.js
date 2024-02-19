@@ -42,6 +42,11 @@ function rbtParse(contents) {
   bitstreamTable = makeBitstreamTable(rawBitstream);
 }
 
+function binParse(contents) {
+  rawBitstream = parseBinFile(contents);
+  bitstreamTable = makeBitstreamTable(rawBitstream);
+}
+
 /**
  * Splits the RBT file into lines, removing headers.
  * erturns rawBitstream
@@ -78,6 +83,62 @@ function parseRbtFile(contents) {
   }
   if (idx != 196 * 87) {
     alert('Wrong number of bits ' + idx + ' in .RBT file');
+    return;
+  }
+  return rawBitstream;
+}
+
+function parseBinFile(contents)
+{
+  const view = new Uint8Array(contents);
+  var pos = 0;
+  var idx = 0;
+
+  function readbits(n)
+  {
+    var ret = 0;
+    for (var i = 0; i < n; i++)
+    {
+      ret <<= 1;
+      ret |= ((view[pos>>3] >> (pos&7)) & 1);
+      pos++;
+    }
+    return ret;
+  }
+
+  var hdr = readbits(12);
+  if (hdr != 0xFF2)
+  {
+    alert('Bad header');
+    return;
+  }
+
+  var len = readbits(24);
+  /*if (len != 0x45DD)
+  {
+    alert('Bad data length');
+    return;
+  }*/
+  if ((contents.byteLength*8) < (len+44))
+  {
+    alert('Bad data length');
+    return;
+  }
+
+  pos += 4;
+  while (readbits(1) != 0);
+  pos--;
+
+  while (readbits(1) == 0)
+  {
+    for (let i = 0; i < 87; i++) {
+      rawBitstream[idx++] = readbits(1);
+    }
+    pos += 3;
+  }
+
+  if (idx != 196 * 87) {
+    alert('Wrong number of bits ' + idx + ' in .BIN file');
     return;
   }
   return rawBitstream;

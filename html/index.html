@@ -40,6 +40,8 @@ $(document).ready(function() {
       file.text().then(lcaUpload);
     } else if (ucname.endsWith('.RBT')) {
       file.text().then(rbtUpload);
+    } else if (ucname.endsWith('.BIN') || ucname.endsWith('.DAT')) {
+      file.arrayBuffer().then(binUpload);
     } else {
       alert('Need to upload a .RBT or .LCA file.');
     }
@@ -151,6 +153,13 @@ $(document).ready(function() {
    */
   function rbtUpload(contents) {
     rbtParse(contents); // Sets rawBitstream and bitstreamTable
+    $('#modetext').css('display', 'block'); // Show the dropdown
+    decode(rawBitstream, config);
+    redraw(ctx);
+  }
+
+  function binUpload(contents) {
+    binParse(contents); // Sets rawBitstream and bitstreamTable
     $('#modetext').css('display', 'block'); // Show the dropdown
     decode(rawBitstream, config);
     redraw(ctx);
