@@ -119,7 +119,7 @@ function parseBinFile(contents)
     alert('Bad data length');
     return;
   }*/
-  if ((contents.byteLength*8) < (len+44))
+  if ((contents.byteLength*8) < len)
   {
     alert('Bad data length');
     return;
