@@ -9,3 +9,5 @@ I have made the following changes to it:
 * Added support for clock nets, fixed a couple bugs
 * Added a simple emulator
 
+Demo available at https://blargcity.kuribo64.net/xc2018/ (emulator at https://blargcity.kuribo64.net/xc2018/emulator.html )
+
